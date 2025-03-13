@@ -1,0 +1,31 @@
+package org.example.domain.dto;
+
+import org.example.domain.BuyOperation;
+import org.example.domain.Operation;
+import org.example.domain.SellOperation;
+
+public class OperationDTO {
+    private String operation;
+    private double unitCost;
+    private int quantity;
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public double getUnitCost() {
+        return unitCost;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Operation toOperation() {
+        return switch (this.operation) {
+            case "buy" -> new BuyOperation(unitCost, quantity);
+            case "sell" -> new SellOperation(unitCost, quantity);
+            default -> throw new IllegalArgumentException("Operação desconhecida: " + operation);
+        };
+    }
+}
