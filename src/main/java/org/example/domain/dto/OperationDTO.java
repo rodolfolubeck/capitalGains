@@ -1,8 +1,8 @@
 package org.example.domain.dto;
 
-import org.example.domain.BuyOperation;
-import org.example.domain.Operation;
-import org.example.domain.SellOperation;
+import org.example.domain.operation.BuyOperation;
+import org.example.domain.operation.Operation;
+import org.example.domain.operation.SellOperation;
 
 public class OperationDTO {
     private String operation;
