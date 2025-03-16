@@ -21,6 +21,19 @@ public class OperationDTO {
         return quantity;
     }
 
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+
+    public void setUnitCost(double unitCost) {
+        this.unitCost = unitCost;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+
     public Operation toOperation() {
         return switch (this.operation) {
             case "buy" -> new BuyOperation(unitCost, quantity);
