@@ -30,10 +30,13 @@ public class Main {
     public List<TaxResultDTO> processOperations(String jsonInput) throws IOException {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE);
 
-        String[] operationsGroups = jsonInput.split("\\]\\s*\\[");
+        // Separar os grupos de operações com base em um caractere de quebra
+        String[] operationsGroups = jsonInput.split("\\]\\s*\\[");  // divide os grupos de operações
         List<TaxResultDTO> taxes = new ArrayList<>();
 
+        // Processar cada grupo de operações separadamente
         for (String operationsGroup : operationsGroups) {
+            // Garantir que o grupo de operações esteja no formato correto de JSON
             if (!operationsGroup.startsWith("[")) {
                 operationsGroup = "[" + operationsGroup;
             }
@@ -41,17 +44,19 @@ public class Main {
                 operationsGroup = operationsGroup + "]";
             }
 
+            // Converter o grupo de operações para objetos OperationDTO
             List<OperationDTO> operationsDTO = objectMapper.readValue(operationsGroup, objectMapper.getTypeFactory()
                     .constructCollectionType(List.class, OperationDTO.class));
 
+            // Processar cada operação dentro do grupo
             for (OperationDTO operationDTO : operationsDTO) {
                 Operation operation = operationDTO.toOperation();
                 if ("buy".equals(operation.getType())) {
                     operation.execute(portfolioService);
-                    taxes.add(new TaxResultDTO(0.00));
+                    taxes.add(new TaxResultDTO(0.00)); // Nenhum imposto para operações de compra
                 } else if ("sell".equals(operation.getType())) {
                     double tax = portfolioService.processSell((SellOperation) operation);
-                    taxes.add(new TaxResultDTO(tax));
+                    taxes.add(new TaxResultDTO(tax)); // Adiciona imposto para operações de venda
                 }
             }
         }
@@ -65,7 +70,6 @@ public class Main {
         Main main = new Main(portfolioService, objectMapper);
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-            System.out.println("Digite o JSON das operações (pressione ENTER para finalizar):");
             StringBuilder input = new StringBuilder();
 
             String line;
