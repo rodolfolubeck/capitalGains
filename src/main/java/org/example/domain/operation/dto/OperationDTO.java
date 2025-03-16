@@ -1,4 +1,4 @@
-package org.example.domain.dto;
+package org.example.domain.operation.dto;
 
 import org.example.domain.operation.BuyOperation;
 import org.example.domain.operation.Operation;

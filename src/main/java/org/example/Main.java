@@ -2,7 +2,7 @@
 
     import com.fasterxml.jackson.databind.ObjectMapper;
     import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-    import org.example.domain.dto.OperationDTO;
+    import org.example.domain.operation.dto.OperationDTO;
     import org.example.domain.dto.TaxResultDTO;
     import org.example.domain.operation.Operation;
     import org.example.domain.operation.SellOperation;
