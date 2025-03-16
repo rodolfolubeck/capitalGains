@@ -25,6 +25,24 @@ java -jar target/capitalGainsNu-1.0-SNAPSHOT.jar
 
 ```
 
+### 4️⃣ Executar o programa com Docker
+#### Na raiz do projeto
+
+- Criar a imagem docker:
+```bash 
+docker build -t capital-gains-app .
+```
+- Rodar o container de forma interativa:
+```bash
+docker run --rm -i capital-gains-app 
+```
+- Agora você pode inserir os JSONs manualmente no terminal e pressionar Enter, e o programa processará a entrada.
+
+- Rodar o programa com um arquivo JSON:
+```bash
+cat input.json | docker run --rm -i capital-gains-app
+```
+
 ## 🏗️ Estrutura do projeto
 ```bash
 ├── Main.java                # Classe principal que lê JSON, processa operações e imprime impostos

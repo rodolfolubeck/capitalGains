@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  capital-gains:
+    build: .
+    container_name: capital-gains-app
+    volumes:
+      - ./input.json:/app/input.json # Monta um arquivo JSON de entrada para testes
+    stdin_open: true
+    tty: true
+    command: ["java", "-jar", "app.jar", "<", "input.json"]
