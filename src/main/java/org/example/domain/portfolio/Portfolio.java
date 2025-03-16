@@ -8,59 +8,71 @@ import java.util.Queue;
 
 public class Portfolio {
     private final Queue<BuyOperation> buyOperations = new LinkedList<>();
-    private double carriedLoss = 0;
+    private double carriedLoss = 0.0;
+    private double weightedAveragePrice = 0.0;
+    private int totalQuantity = 0;
 
     public void addBuy(BuyOperation buy) {
+        // Recalcula o preço médio ponderado
+        weightedAveragePrice = ((totalQuantity * weightedAveragePrice) + (buy.quantity() * buy.unitCost()))
+                / (totalQuantity + buy.quantity());
+
+        totalQuantity += buy.quantity();
         buyOperations.add(buy);
     }
 
     public double processSell(SellOperation sell) {
         int quantityToSell = sell.quantity();
-        double totalCost = 0.0;
-        int quantitySold = 0;
-        double profitOrLoss = 0.0;
+        double totalSellValue = sell.unitCost() * quantityToSell;
+        double profitOrLoss = (sell.unitCost() - weightedAveragePrice) * quantityToSell;
 
+        totalQuantity -= quantityToSell;
+        removeOldBuys(quantityToSell);
+
+        // Dedução correta do prejuízo acumulado
+        profitOrLoss = applyCarriedLoss(profitOrLoss);
+
+        // Calcula imposto se necessário
+        return calculateTax(profitOrLoss, totalSellValue);
+    }
+
+    private void removeOldBuys(int quantityToSell) {
         while (quantityToSell > 0 && !buyOperations.isEmpty()) {
-            BuyOperation buy = buyOperations.peek();
+            BuyOperation buy = buyOperations.poll();
             int availableQuantity = buy.quantity();
 
-            if (availableQuantity <= quantityToSell) {
-                buyOperations.poll();
-                quantityToSell -= availableQuantity;
-                totalCost += availableQuantity * buy.unitCost();
-                quantitySold += availableQuantity;
-            } else {
-                buyOperations.poll();
+            if (availableQuantity > quantityToSell) {
                 buyOperations.add(new BuyOperation(buy.unitCost(), availableQuantity - quantityToSell));
-                totalCost += quantityToSell * buy.unitCost();
-                quantitySold += quantityToSell;
-                quantityToSell = 0;
+                return;
             }
+
+            quantityToSell -= availableQuantity;
+        }
+    }
+
+    private double applyCarriedLoss(double profitOrLoss) {
+        if (profitOrLoss < 0) {
+            carriedLoss += profitOrLoss; // Acumula prejuízo negativo
+            return 0;
         }
 
-        double avgBuyPrice = totalCost / quantitySold;
-
-        profitOrLoss = (sell.unitCost() - avgBuyPrice) * quantitySold;
-
-        if (profitOrLoss < 0) {
-            carriedLoss += profitOrLoss;
-            profitOrLoss = 0;
-        } else if (carriedLoss < 0) {
+        if (carriedLoss < 0) {
             double remainingLoss = Math.abs(carriedLoss);
             if (remainingLoss >= profitOrLoss) {
                 carriedLoss += profitOrLoss;
-                profitOrLoss = 0;
-            } else {
-                carriedLoss = 0;
-                profitOrLoss -= remainingLoss;
+                return 0;
             }
+            carriedLoss = 0;
+            return profitOrLoss - remainingLoss;
         }
 
-        double tax = 0;
-        if (profitOrLoss > 0 && (sell.unitCost() * sell.quantity()) > 20000.00) {
-            tax = profitOrLoss * 0.20;
-        }
+        return profitOrLoss;
+    }
 
-        return tax;
+    private double calculateTax(double profitOrLoss, double totalSellValue) {
+        if (profitOrLoss > 0 && totalSellValue > 20000.00) {
+            return profitOrLoss * 0.20;
+        }
+        return 0;
     }
 }
