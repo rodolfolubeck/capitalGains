@@ -47,6 +47,9 @@ public class MainIntegrationTest {
                             PrintStream printStream = new PrintStream(outputStream);
                             System.setOut(printStream);
 
+                            // Imprime o nome do arquivo que está sendo processado
+                            System.out.println("Processando arquivo: " + inputFile.getFileName());
+
                             // Executa o método main da sua classe
                             Main.main(new String[]{});
 
@@ -56,7 +59,12 @@ public class MainIntegrationTest {
                             // Compara a saída esperada com a saída gerada
                             assertEquals(expectedJsonOutput, actualJsonOutput);
 
+                            // Imprime "Sucesso" caso a saída seja igual à esperada
+                            System.out.println("Resultado: Sucesso");
+
                         } catch (Exception e) {
+                            // Imprime "Erro" caso ocorra uma exceção
+                            System.out.println("Erro ao processar o arquivo: " + inputFile.getFileName());
                             e.printStackTrace();
                         }
                     });

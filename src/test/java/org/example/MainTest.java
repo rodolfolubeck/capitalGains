@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,21 +75,21 @@ public class MainTest {
                 + "{\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\":50}]";
 
         // Chamando o método processOperations diretamente
-        List<TaxResultDTO> taxes = main.processOperations(jsonInput);
+        List<List<TaxResultDTO>> allTaxes = main.processOperations(jsonInput);
 
         // Verificar se as operações foram processadas corretamente
         Mockito.verify(portfolioService, Mockito.times(2)).processSell(Mockito.any(SellOperation.class));
 
-        // A saída esperada de TaxResultDTO pode ser ajustada com base nos cálculos do imposto
-        List<TaxResultDTO> expectedTaxes = List.of(
+        // A saída esperada de TaxResultDTO agora é uma lista de listas
+        List<TaxResultDTO> expectedTaxesGroup1 = List.of(
                 new TaxResultDTO(0.00),  // Imposto para a operação de compra
                 new TaxResultDTO(0.00),  // Imposto para a primeira venda
                 new TaxResultDTO(0.00)   // Imposto para a segunda venda
         );
 
         // Comparar diretamente os valores de tax, sem se preocupar com as instâncias
-        for (int i = 0; i < taxes.size(); i++) {
-            assertEquals(expectedTaxes.get(i).getTax(), taxes.get(i).getTax(), 0.01);  // Comparação de valores com uma margem de erro de 0.01
+        for (int i = 0; i < allTaxes.get(0).size(); i++) {
+            assertEquals(expectedTaxesGroup1.get(i).getTax(), allTaxes.get(0).get(i).getTax(), 0.01);  // Comparação de valores com uma margem de erro de 0.01
         }
     }
 }
