@@ -6,7 +6,7 @@
     import org.example.domain.dto.TaxResultDTO;
     import org.example.domain.operation.Operation;
     import org.example.domain.operation.SellOperation;
-    import org.example.domain.portfolio.Portfolio;
+    import org.example.services.portfolio.PortfolioService;
 
     import java.io.BufferedReader;
     import java.io.IOException;
@@ -45,16 +45,16 @@
                     List<OperationDTO> operationsDTO = objectMapper.readValue(operationsGroup, objectMapper.getTypeFactory()
                             .constructCollectionType(List.class, OperationDTO.class));
 
-                    Portfolio portfolio = new Portfolio();
+                    PortfolioService portfolioService = new PortfolioService();
                     List<TaxResultDTO> taxes = new ArrayList<>();
 
                     for (OperationDTO operationDTO : operationsDTO) {
                         Operation operation = operationDTO.toOperation();
                         if ("buy".equals(operation.getType())) {
-                            operation.execute(portfolio);
+                            operation.execute(portfolioService);
                             taxes.add(new TaxResultDTO(0.00));
                         } else if ("sell".equals(operation.getType())) {
-                            double tax = portfolio.processSell((SellOperation) operation);
+                            double tax = portfolioService.processSell((SellOperation) operation);
                             taxes.add(new TaxResultDTO(tax));
                         }
                     }

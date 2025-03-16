@@ -1,16 +1,18 @@
-package org.example.domain.portfolio;
+package org.example.services.portfolio;
 
 import org.example.domain.operation.BuyOperation;
 import org.example.domain.operation.SellOperation;
+import org.example.services.tax.TaxService;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Portfolio {
+public class PortfolioService {
     private final Queue<BuyOperation> buyOperations = new LinkedList<>();
     private double carriedLoss = 0.0;
     private double weightedAveragePrice = 0.0;
     private int totalQuantity = 0;
+    private final TaxService taxService = new TaxService();
 
     public void addBuy(BuyOperation buy) {
         weightedAveragePrice = ((totalQuantity * weightedAveragePrice) + (buy.quantity() * buy.unitCost()))
@@ -30,7 +32,7 @@ public class Portfolio {
 
         profitOrLoss = applyCarriedLoss(profitOrLoss);
 
-        return calculateTax(profitOrLoss, totalSellValue);
+        return taxService.calculateTax(profitOrLoss, totalSellValue);
     }
 
     private void removeOldBuys(int quantityToSell) {
@@ -64,12 +66,5 @@ public class Portfolio {
         }
 
         return profitOrLoss;
-    }
-
-    private double calculateTax(double profitOrLoss, double totalSellValue) {
-        if (profitOrLoss > 0 && totalSellValue > 20000.00) {
-            return profitOrLoss * 0.20;
-        }
-        return 0;
     }
 }

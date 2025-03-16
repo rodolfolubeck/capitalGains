@@ -1,12 +1,12 @@
 package org.example.domain.operation;
 
-import org.example.domain.portfolio.Portfolio;
+import org.example.services.portfolio.PortfolioService;
 
 public record BuyOperation(double unitCost, int quantity) implements Operation {
 
     @Override
-    public void execute(Portfolio portfolio) {
-        portfolio.addBuy(this);
+    public void execute(PortfolioService portfolioService) {
+        portfolioService.addBuy(this);
     }
 
     @Override

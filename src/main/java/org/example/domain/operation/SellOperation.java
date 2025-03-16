@@ -1,12 +1,12 @@
 package org.example.domain.operation;
 
-import org.example.domain.portfolio.Portfolio;
+import org.example.services.portfolio.PortfolioService;
 
 public record SellOperation(double unitCost, int quantity) implements Operation {
 
     @Override
-    public void execute(Portfolio portfolio) {
-        double tax = portfolio.processSell(this);
+    public void execute(PortfolioService portfolioService) {
+        double tax = portfolioService.processSell(this);
     }
 
     @Override

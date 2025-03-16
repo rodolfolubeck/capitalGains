@@ -1,9 +1,9 @@
 package org.example.domain.operation;
 
-import org.example.domain.portfolio.Portfolio;
+import org.example.services.portfolio.PortfolioService;
 
 public interface Operation {
-    void execute(Portfolio portfolio);
+    void execute(PortfolioService portfolioService);
     String getType();
 
 }
