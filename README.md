@@ -25,6 +25,7 @@ java -jar target/capitalGainsNu-1.0-SNAPSHOT.jar
 
 ```
 
+## 🏗️ Estrutura do projeto
 ```bash
 ├── Main.java                # Classe principal que lê JSON, processa operações e imprime impostos
 ├── domain                   # Pacote contendo entidades e DTOs
