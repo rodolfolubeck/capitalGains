@@ -30,13 +30,10 @@ public class Main {
     public List<List<TaxResultDTO>> processOperations(String jsonInput) throws IOException {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE);
 
-        // Separar os grupos de operações por cada par de colchetes
         String[] operationsGroups = jsonInput.split("\\]\\s*\\[");
-        List<List<TaxResultDTO>> allTaxes = new ArrayList<>();  // Lista de listas para cada grupo de impostos
+        List<List<TaxResultDTO>> allTaxes = new ArrayList<>();
 
-        // Processar cada grupo de operações separadamente
         for (String operationsGroup : operationsGroups) {
-            // Garantir que o grupo de operações esteja no formato correto
             if (!operationsGroup.startsWith("[")) {
                 operationsGroup = "[" + operationsGroup;
             }
@@ -44,24 +41,21 @@ public class Main {
                 operationsGroup = operationsGroup + "]";
             }
 
-            // Converter o grupo de operações para objetos OperationDTO
             List<OperationDTO> operationsDTO = objectMapper.readValue(operationsGroup, objectMapper.getTypeFactory()
                     .constructCollectionType(List.class, OperationDTO.class));
 
-            // Processar cada operação dentro do grupo
-            List<TaxResultDTO> groupTaxes = new ArrayList<>(); // Lista para armazenar os impostos de cada grupo
+            List<TaxResultDTO> groupTaxes = new ArrayList<>();
             for (OperationDTO operationDTO : operationsDTO) {
                 Operation operation = operationDTO.toOperation();
                 if ("buy".equals(operation.getType())) {
                     operation.execute(portfolioService);
-                    groupTaxes.add(new TaxResultDTO(0.00)); // Nenhum imposto para operações de compra
+                    groupTaxes.add(new TaxResultDTO(0.00));
                 } else if ("sell".equals(operation.getType())) {
                     double tax = portfolioService.processSell((SellOperation) operation);
-                    groupTaxes.add(new TaxResultDTO(tax)); // Adiciona imposto para operações de venda
+                    groupTaxes.add(new TaxResultDTO(tax));
                 }
             }
 
-            // Adiciona a lista de impostos do grupo de operações na lista geral
             allTaxes.add(groupTaxes);
         }
 
@@ -84,10 +78,8 @@ public class Main {
                 input.append(line).append("\n");
             }
 
-            // Processa as operações, agora retornando uma lista de listas de resultados
             List<List<TaxResultDTO>> allTaxes = main.processOperations(input.toString().trim());
 
-            // Para cada grupo de impostos, converta para JSON e imprima separadamente
             for (List<TaxResultDTO> groupTaxes : allTaxes) {
                 System.out.println(objectMapper.writeValueAsString(groupTaxes));
             }

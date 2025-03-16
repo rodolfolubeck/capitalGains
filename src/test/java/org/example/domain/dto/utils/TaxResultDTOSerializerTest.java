@@ -17,7 +17,6 @@ public class TaxResultDTOSerializerTest {
 
         String json = objectMapper.writeValueAsString(taxResultDTO);
 
-        // Espera-se que o valor tenha exatamente o formato " tax: 0.00"
         String expectedJson = "{\"tax\": 0.00}";
 
         assertEquals(expectedJson, json);
@@ -29,7 +28,6 @@ public class TaxResultDTOSerializerTest {
 
         String json = objectMapper.writeValueAsString(taxResultDTO);
 
-        // Espera-se que o valor tenha exatamente o formato " tax: 10.25"
         String expectedJson = "{\"tax\": 10.25}";
 
         assertEquals(expectedJson, json);
@@ -41,7 +39,6 @@ public class TaxResultDTOSerializerTest {
 
         String json = objectMapper.writeValueAsString(taxResultDTO);
 
-        // Espera-se que o valor tenha exatamente o formato " tax: 5.00"
         String expectedJson = "{\"tax\": 5.00}";
 
         assertEquals(expectedJson, json);
@@ -53,7 +50,6 @@ public class TaxResultDTOSerializerTest {
 
         String json = objectMapper.writeValueAsString(taxResultDTO);
 
-        // Espera-se que o valor tenha exatamente o formato " tax: -2.75"
         String expectedJson = "{\"tax\": -2.75}";
 
         assertEquals(expectedJson, json);
@@ -69,7 +65,6 @@ public class TaxResultDTOSerializerTest {
 
         String json = objectMapper.writeValueAsString(taxResults);
 
-        // Espera-se que o valor tenha exatamente o formato: [{"tax": 0.00}, {"tax": 10.25}, {"tax": 5.00}]
         String expectedJson = "[{\"tax\": 0.00},{\"tax\": 10.25},{\"tax\": 5.00}]";
 
         assertEquals(expectedJson, json);

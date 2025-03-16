@@ -41,13 +41,11 @@ public class MainTest {
         objectMapper = new ObjectMapper();
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE);
 
-        // Criando instância de Main com mocks
         main = new Main(portfolioService, objectMapper);
     }
 
     @Test
     public void testProcessOperations() throws Exception {
-        // Definindo os mocks para simular o comportamento do DTO
         Mockito.when(buyOperationDTO.getOperation()).thenReturn("buy");
         Mockito.when(buyOperationDTO.getUnitCost()).thenReturn(10.00);
         Mockito.when(buyOperationDTO.getQuantity()).thenReturn(100);
@@ -69,27 +67,22 @@ public class MainTest {
         Mockito.when(sellOperationDTO1.toOperation()).thenReturn(sellOperation1);
         Mockito.when(sellOperationDTO2.toOperation()).thenReturn(sellOperation2);
 
-        // Configuração do fluxo de entrada do JSON
         String jsonInput = "[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\":100},"
                 + "{\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\":50},"
                 + "{\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\":50}]";
 
-        // Chamando o método processOperations diretamente
         List<List<TaxResultDTO>> allTaxes = main.processOperations(jsonInput);
 
-        // Verificar se as operações foram processadas corretamente
         Mockito.verify(portfolioService, Mockito.times(2)).processSell(Mockito.any(SellOperation.class));
 
-        // A saída esperada de TaxResultDTO agora é uma lista de listas
         List<TaxResultDTO> expectedTaxesGroup1 = List.of(
-                new TaxResultDTO(0.00),  // Imposto para a operação de compra
-                new TaxResultDTO(0.00),  // Imposto para a primeira venda
-                new TaxResultDTO(0.00)   // Imposto para a segunda venda
+                new TaxResultDTO(0.00),
+                new TaxResultDTO(0.00),
+                new TaxResultDTO(0.00)
         );
 
-        // Comparar diretamente os valores de tax, sem se preocupar com as instâncias
         for (int i = 0; i < allTaxes.get(0).size(); i++) {
-            assertEquals(expectedTaxesGroup1.get(i).getTax(), allTaxes.get(0).get(i).getTax(), 0.01);  // Comparação de valores com uma margem de erro de 0.01
+            assertEquals(expectedTaxesGroup1.get(i).getTax(), allTaxes.get(0).get(i).getTax(), 0.01);
         }
     }
 }
