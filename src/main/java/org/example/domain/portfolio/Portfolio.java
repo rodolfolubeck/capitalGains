@@ -13,7 +13,6 @@ public class Portfolio {
     private int totalQuantity = 0;
 
     public void addBuy(BuyOperation buy) {
-        // Recalcula o preço médio ponderado
         weightedAveragePrice = ((totalQuantity * weightedAveragePrice) + (buy.quantity() * buy.unitCost()))
                 / (totalQuantity + buy.quantity());
 
@@ -29,10 +28,8 @@ public class Portfolio {
         totalQuantity -= quantityToSell;
         removeOldBuys(quantityToSell);
 
-        // Dedução correta do prejuízo acumulado
         profitOrLoss = applyCarriedLoss(profitOrLoss);
 
-        // Calcula imposto se necessário
         return calculateTax(profitOrLoss, totalSellValue);
     }
 
@@ -52,7 +49,7 @@ public class Portfolio {
 
     private double applyCarriedLoss(double profitOrLoss) {
         if (profitOrLoss < 0) {
-            carriedLoss += profitOrLoss; // Acumula prejuízo negativo
+            carriedLoss += profitOrLoss;
             return 0;
         }
 

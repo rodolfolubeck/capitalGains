@@ -23,7 +23,6 @@
                 System.out.println("Digite o JSON das operações (pressione ENTER para finalizar):");
                 StringBuilder input = new StringBuilder();
 
-                //validação da linha em branco
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (line.trim().isEmpty()) {
@@ -34,11 +33,8 @@
 
                 String jsonInput = input.toString().trim();
 
-                // Agora vamos dividir o JSON em duas partes corretamente
-                String[] operationsGroups = jsonInput.split("\\]\\s*\\["); // Divide corretamente nas listas
-
+                String[] operationsGroups = jsonInput.split("\\]\\s*\\[");
                 for (String operationsGroup : operationsGroups) {
-                    // Corrigir para adicionar os colchetes ao redor de cada grupo
                     if (!operationsGroup.startsWith("[")) {
                         operationsGroup = "[" + operationsGroup;
                     }
@@ -46,7 +42,6 @@
                         operationsGroup = operationsGroup + "]";
                     }
 
-                    // Agora processamos cada grupo de operações corretamente
                     List<OperationDTO> operationsDTO = objectMapper.readValue(operationsGroup, objectMapper.getTypeFactory()
                             .constructCollectionType(List.class, OperationDTO.class));
 
