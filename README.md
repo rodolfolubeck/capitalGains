@@ -1,4 +1,4 @@
-# Capital Gains Tax Calculator
+# Capital Gains
 
 Este projeto é um sistema para cálculo de imposto sobre ganhos de capital em operações de compra e venda de ações. Ele processa entradas JSON contendo operações e retorna os impostos devidos conforme as regras fiscais estabelecidas.
 
