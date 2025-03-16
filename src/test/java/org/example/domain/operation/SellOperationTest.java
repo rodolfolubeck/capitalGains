@@ -19,7 +19,7 @@ public class SellOperationTest {
 
         SellOperation sellOperation = new SellOperation(15.00, 50);
 
-        when(portfolioService.processSell(sellOperation)).thenReturn(100.00); // Exemplo de valor do imposto retornado
+        when(portfolioService.processSell(sellOperation)).thenReturn(100.00);
 
         sellOperation.execute(portfolioService);
 

@@ -58,7 +58,6 @@ public class MainTest {
         Mockito.when(sellOperationDTO2.getUnitCost()).thenReturn(15.00);
         Mockito.when(sellOperationDTO2.getQuantity()).thenReturn(50);
 
-        // Mock para o método toOperation
         Operation buyOperation = new BuyOperation(10.00, 100);
         Operation sellOperation1 = new SellOperation(15.00, 50);
         Operation sellOperation2 = new SellOperation(15.00, 50);

@@ -118,7 +118,6 @@ public class PortfolioServiceTest {
     public void testRemoveOldBuys() throws Exception {
         PortfolioService portfolioService = new PortfolioService();
 
-        // Adicionando compras
         portfolioService.addBuy(new BuyOperation(10.00, 100));
         portfolioService.addBuy(new BuyOperation(12.00, 50));
 

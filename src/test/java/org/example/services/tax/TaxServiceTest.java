@@ -38,7 +38,6 @@ public class TaxServiceTest {
 
         double tax = taxService.calculateTax(profitOrLoss, totalSellValue);
 
-        // O imposto deve ser 0 pois o lucro é negativo
         assertEquals(0.0, tax, "O imposto calculado deve ser 0 para prejuízo.");
     }
 
